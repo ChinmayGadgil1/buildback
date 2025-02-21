@@ -14,7 +14,7 @@ const projectRoutes = require('./routes/projects');
 
 // MongoDB connection
 mongoose
-  .connect(process.env.MONGODB_URI, {
+  .connect('mongodb+srv://3011adinaik:toqkiG-rexji7-kexbis@item-store.2gzwbsj.mongodb.net/blog-website?retryWrites=true&w=majority&appName=blog', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -30,10 +30,10 @@ app.prepare().then(() => {
   // Session setup with MongoDB store
   server.use(
     session({
-      secret: process.env.SESSION_SECRET,
+      secret: 'secret',
       resave: false,
       saveUninitialized: false,
-      store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
+      store: MongoStore.create({ mongoUrl: 'mongodb+srv://3011adinaik:toqkiG-rexji7-kexbis@item-store.2gzwbsj.mongodb.net/blog-website?retryWrites=true&w=majority&appName=blog' }),
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
         httpOnly: true,
