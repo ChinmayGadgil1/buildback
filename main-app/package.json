@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
+    "axios": "^1.7.9",
     "bcryptjs": "^3.0.2",
     "connect-mongo": "^5.1.0",
     "express": "^4.21.2",
