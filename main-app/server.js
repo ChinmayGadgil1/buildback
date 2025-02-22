@@ -27,7 +27,11 @@ app.prepare().then(() => {
   
   // CORS middleware
   server.use(cors({
-    origin: process.env.NODE_ENV === 'production' ? 'your-production-domain.com' : 'http://localhost:3000',
+    origin: [
+      'https://buildback-sb4w.onrender.com',
+      'http://localhost:3000',
+      '*' // Remove this in production
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
