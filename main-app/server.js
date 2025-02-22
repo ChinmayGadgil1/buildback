@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const next = require('next');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+const cors = require('cors');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -24,6 +25,14 @@ mongoose
 app.prepare().then(() => {
   const server = express();
   
+  // CORS middleware
+  server.use(cors({
+    origin: process.env.NODE_ENV === 'production' ? 'your-production-domain.com' : 'http://localhost:3000',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  }));
+
   // Parse JSON request body
   server.use(express.json());
   
