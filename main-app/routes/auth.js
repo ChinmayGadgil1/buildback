@@ -32,22 +32,25 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     
-    // Find user by email
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
     
-    // Verify password
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
     
-    // Set user session
+    // Set user session with additional data
     req.session.userId = user._id;
-    
-    res.json({ message: 'Login successful' });
+    req.session.email = user.email;
+    await req.session.save(); // Ensure session is saved
+
+    res.json({ 
+      message: 'Login successful',
+      user: { id: user._id, email: user.email }
+    });
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ message: 'Server error' });

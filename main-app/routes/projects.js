@@ -2,16 +2,22 @@ const express = require('express');
 const router = express.Router();
 const Project = require('../models/Project');
 
-// Auth middleware
+// Auth middleware - moved to separate middleware folder
 const isAuthenticated = (req, res, next) => {
-  if (!req.session.userId) {
-    return res.status(401).json({ message: 'Not authenticated' });
+  if (!req.session || !req.session.userId) {
+    return res.status(401).json({ 
+      message: 'Not authenticated',
+      redirectTo: '/login'
+    });
   }
   next();
 };
 
+// Apply auth middleware to all routes
+router.use(isAuthenticated);
+
 // Get all projects for current user
-router.get('/', isAuthenticated, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const projects = await Project.find({ userId: req.session.userId })
       .select('name updatedAt')
@@ -25,7 +31,7 @@ router.get('/', isAuthenticated, async (req, res) => {
 });
 
 // Get a specific project
-router.get('/:id', isAuthenticated, async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const project = await Project.findOne({
       _id: req.params.id,
@@ -44,7 +50,7 @@ router.get('/:id', isAuthenticated, async (req, res) => {
 });
 
 // Create a new project
-router.post('/', isAuthenticated, async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const { name, code } = req.body;
     
@@ -63,7 +69,7 @@ router.post('/', isAuthenticated, async (req, res) => {
 });
 
 // Update an existing project
-router.put('/:id', isAuthenticated, async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const { name, code } = req.body;
     
@@ -89,7 +95,7 @@ router.put('/:id', isAuthenticated, async (req, res) => {
 });
 
 // Delete a project
-router.delete('/:id', isAuthenticated, async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const result = await Project.findOneAndDelete({
       _id: req.params.id,
