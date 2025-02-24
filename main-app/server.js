@@ -5,7 +5,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const cors = require('cors');
 
-const dev = process.env.NODE_ENV !== 'production';
+const dev = false;
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
@@ -24,35 +24,36 @@ mongoose
 
 app.prepare().then(() => {
   const server = express();
-  
-  // CORS middleware
+  console.log(dev);
+
   server.use(cors({
     origin: [
       'https://buildback-sb4w.onrender.com',
       'http://localhost:3000',
-      '*' // Remove this in production
     ],
-    credentials: true,
+    credentials: true, 
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
   }));
 
-  // Parse JSON request body
+  
   server.use(express.json());
   
-  // Session setup with MongoDB store
+ 
   server.use(
     session({
       secret: 'secret',
       resave: false,
       saveUninitialized: false,
-      store: MongoStore.create({ mongoUrl: 'mongodb+srv://3011adinaik:toqkiG-rexji7-kexbis@item-store.2gzwbsj.mongodb.net/blog-website?retryWrites=true&w=majority&appName=blog' }),
+      store: MongoStore.create({ 
+        mongoUrl: 'mongodb+srv://3011adinaik:toqkiG-rexji7-kexbis@item-store.2gzwbsj.mongodb.net/blog-website?retryWrites=true&w=majority&appName=blog' 
+      }),
       cookie: {
-        maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+        maxAge: 1000 * 60 * 60 * 24 * 7, 
         httpOnly: true,
-        secure: true,
+        secure: !dev, 
         sameSite: 'lax',
-        domain: 'https://buildback-sb4w.onrender.com/'
+        domain: dev ? undefined : 'buildback-sb4w.onrender.com' 
       },
     })
   );
