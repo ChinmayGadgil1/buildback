@@ -4,6 +4,7 @@ const User = require('../models/User');  // Fix relative path
 
 // Register new user
 router.post('/register', async (req, res) => {
+  console.log("Reached register route");
   try {
     const { email, password } = req.body;
     

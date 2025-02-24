@@ -50,7 +50,7 @@ app.prepare().then(() => {
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: true,
         sameSite: 'lax',
         domain: 'https://buildback-sb4w.onrender.com/'
       },

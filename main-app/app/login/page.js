@@ -37,7 +37,8 @@ export default function Login() {
         throw new Error(data.message || 'Something went wrong');
       }
       
-      router.replace('/dashboard');
+      // router.replace('/dashboard');
+      router.push('/dashboard');
     } catch (err) {
       setError(err.message);
     } finally {
