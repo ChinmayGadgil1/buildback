@@ -48,9 +48,9 @@ export default function Register() {
       });
       
       const data = await res.json();
-      
       if (!res.ok) {
         throw new Error(data.message || 'Registration failed');
+        console.log("Failure");
       }
       
       router.push('/dashboard');
